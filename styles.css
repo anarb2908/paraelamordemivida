@@ -1,0 +1,214 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primario: #fff;
+    --fondo: #f1e2f5; 
+    --fondo-sobre: #cbadda; 
+    --solapa-sobre: #cbadda; 
+    --cuerpo-sobre: #a279af; 
+    --sombra: rgba(0, 0, 0, 0.2);
+    --texto: #010d13; 
+    --corazon: #5a2661; 
+}
+
+body {
+    background: var(--fondo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden; /* Evita scroll por la lluvia */
+}
+
+h1 {
+    font-family: "Dancing Script", cursive;
+    text-align: center;
+    font-size: 60px;
+    margin-bottom: 50px;
+    color: #131212;
+}
+
+.contenedor {
+    width: 400px;
+    z-index: 10;
+}
+
+.envoltura-sobre {
+    position: relative;
+    background-color: var(--fondo-sobre);
+    box-shadow: 0 0 40px var(--sombra);
+    border-radius: 15px;
+}
+
+.sobre {
+    position: relative;
+    width: 400px;
+    height: 300px;
+}
+
+.sobre::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    border-top: 180px solid var(--solapa-sobre);
+    border-right: 200px solid transparent;
+    border-left: 200px solid transparent;
+    transform-origin: top;
+    transition: all 0.5s ease-in-out 0.7s;
+    border-radius: 10px;
+}
+
+.solapa-derecha {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    background-color: var(--cuerpo-sobre);
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    z-index: 3;
+}
+
+.solapa-izquierda {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+    background-color: var(--cuerpo-sobre);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    z-index: 3;
+}
+
+.carta {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primario);
+    text-align: center;
+    box-shadow: 0 0 5px var(--sombra);
+    padding: 20px;
+    border-radius: 10px;
+    transition: transform .5s ease-in-out;
+    z-index: 2;
+}
+
+.contenido {
+    font-family: "Gill Sans", Calibri, sans-serif;
+    color: var(--texto);
+    text-align: left;
+    font-size: 12px;
+    border: 3px dotted var(--texto);
+    padding: 10px;
+    height: 100%;
+    line-height: 14px;
+    cursor: pointer;
+    overflow-y: auto;
+}
+
+.corazon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: var(--corazon);
+    transform: translate(-50%,0) rotate(45deg);
+    transition: transform 0.3s ease-in-out 1s;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.corazon::before,
+.corazon::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: var(--corazon);
+    border-radius: 100%;
+}
+
+.corazon:before { top: -15px; }
+.corazon:after { right: 15px; }
+
+/* Clases dinámicas */
+.abierto .sobre::before {
+    transform: rotateX(180deg);
+    z-index: 0;
+}
+
+.abierto .corazon {
+    transform: rotate(90deg) translate(-50%, -50%);
+    transition-delay: 0.4s;
+}
+
+.carta.mostrar-carta {
+    transform: translateY(-290px);
+    z-index: 10;
+}
+
+.carta.abierta {
+    transform: translateY(-290px);
+    z-index: 10;
+}
+
+.envoltura-sobre.desactivar-sobre .sobre::before {
+    pointer-events: none;
+}
+
+/* Lluvia de corazones */
+.corazon-caida {
+    position: fixed;
+    top: -10%;
+    z-index: -1;
+    user-select: none;
+    pointer-events: none;
+    animation: caer linear forwards;
+}
+
+.imagen-centro {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.foto-final {
+    width: 100%;       /* Ocupa el ancho de la carta */
+    max-width: 250px;  /* Pero no más de 250px para que no sea gigante */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 2px solid var(--fondo-sobre); /* Un pequeño borde lila */
+}
+
+/* Ajuste para el scroll de la carta */
+.contenido {
+    overflow-y: auto; /* Permite bajar para ver la foto si el texto es largo */
+}
+
+@keyframes caer {
+    to { transform: translateY(110vh) rotate(360deg); }
+}
+
+@media screen and (max-width:400px) {
+    .contenedor { width: 300px; }
+    .sobre { width: 300px; height: 250px; }
+    .sobre::before {
+        border-top: 150px solid var(--solapa-sobre);
+        border-right: 150px solid transparent;
+        border-left: 150px solid transparent;
+    }
+}
